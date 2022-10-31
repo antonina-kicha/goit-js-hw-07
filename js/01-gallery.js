@@ -35,7 +35,7 @@ function getBigUrl(evt) {
     return urlBigImg;
 };
 
-// Открытие модального окна по клику на элементе галереи
+// Открытие модального окна по клику на элементе галереи. Закрытие по Escape
 gallery.addEventListener('click', openBigImg);
 
 let instance;
@@ -44,17 +44,19 @@ function openBigImg(evt) {
     evt.preventDefault();
     instance = basicLightbox.create(`
     <img src="${urlBigImg}">
-`)
+`, {
+        onClose: (instance) => { document.removeEventListener("keydown", checkClick)}
+})
     instance.show()
-   
+    document.addEventListener("keydown", checkClick)
 }
 
-// Закрытие модального окна по нажатию клавиши Escape
-document.addEventListener("keydown", evt => {
-    if (instance) {
-        if (instance.visible() && evt.code === "Escape") {
-            instance.close();
-        }
+const checkClick = (evt) => {
+if (instance.visible() && evt.code === "Escape") {
+        instance.close();
     }
-});
+    console.log('я еще тут')
+}
+
+
 
